@@ -7,16 +7,22 @@ from AlphaFactor import *
 
 class demo_1(AlphaFactor):
     '''
-    {'def_args': ['close', 'adj'], 'prelength': 4, 'min_prelen': 0, 'type': 'daily'}
+    {'def_args': ['mkt_cap_ard', 'm_volume', 'float_a_shares'], 'prelength': 0, 'min_prelen': 1, 'type': 'daily'}
     '''
-    def definition(self, close, adj):
-        factor = dfunc(close, adjfactor)
+    def definition(self, mkt_cap_ard, m_volume, float_a_shares):
+        factor = self.minute_help(ifunc, 'minute', m_volume, float_a_shares)
+        factor = dfunc(factor, mkt_cap_ard)
         return factor
 
 
-def dfunc(close, adjfactor):
-    ret = (close * adjfactor).pct_change()
-    factor = ret.rolling(5, 3).max()
+def dfunc(factor, mkt_cap_ard):
+    # 所有日间处理
+    factor = factor * mkt_cap_ard
     factor[np.isinf(factor)] = np.nan
-    return factor
+    return factor # 返回为 pd.DataFrame
+
+def ifunc(m_volume, float_a_shares):
+    # 所有日内处理
+    tr = m_volume / float_a_shares.reindex(m_volume.index.date).values
+    return tr.mean() # 返回为 pd.Series
 

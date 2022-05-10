@@ -1,1 +1,1 @@
-{"def_args": ["mkt_cap_ard", "m_volume", "float_a_shares"], "prelength": 0, "min_prelen": 1, "type": "daily"}
+{"def_args": ["close", "adjfactor"], "prelength": 4, "min_prelen": 0, "type": "daily"}

@@ -64,7 +64,7 @@ def main(args):
         if 'dfunc_args' in d:
             dfunc_args = d['dfunc_args']
             definition_body.append("factor = dfunc({dfunc_args})".format(dfunc_args=dfunc_args))
-            dfunc_args = dfunc_args.replace('factor', '')
+            dfunc_args = re.sub(pattern=r'(?<!adj)factor', repl='', string=dfunc_args)
         if 'ifunc_args' in d:
             ifunc_args = d['ifunc_args']
             definition_body.append(
