@@ -48,7 +48,7 @@ class BaseClass(object):
             df = pd.read_csv(file, index_col=0, parse_dates=True).reindex(columns=cols)
         elif cls.file_type == 'pkl' or cls.file_type == 'pickle':
             df = pd.read_pickle(file).reindex(columns=cols)
-        elif cls.filetype == 'parquet':
+        elif cls.file_type == 'parquet':
             df = pd.read_parquet(file, columns=cols)
         return df
 
