@@ -68,12 +68,6 @@ class AlphaFactor(BaseClass):
         self.data_loaded = mp.Manager().list()
         self.idaily_data = self.load_daily(fields=self.params.get('idaily_data', None))
 
-    @classmethod
-    def dt2str(cls, date: datetime) -> str:
-        if isinstance(date, str):
-            date = pd.Timestamp(date)
-        return pd.Timestamp(date).strftime(cls.tm_fmt) 
-
     @abstractmethod
     def definition(self):
         pass
