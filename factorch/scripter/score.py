@@ -28,7 +28,7 @@ def check_prediction(factor, factor_value, length, d, group_num=20):
 
     # 第一次卖出日期与因子值日期相对应
     ret_v2v_1d = (load_daily(field='vwap', valid_field=('is_valid_raw',)) 
-                * load_daily(field='adjfactor')).pct_change().shift(-2).sort_index(axis=0)
+                * load_daily(field='adjfactor')).pct_change().shift(-2).sort_index(axis=0).reindex(columns=fval.columns)
 
     is_buyable = load_daily('vwap') < load_daily('limit_up_price')
 
