@@ -5,7 +5,7 @@ import os
 import time
 import logging
 from datetime import datetime
-from pandas import DataFrame
+from pandas import Series, DataFrame
 from typing import Optional, Union, Iterable, Mapping, Callable
 from pathlib import Path
 from abc import abstractmethod
@@ -25,8 +25,8 @@ class AlphaFactor(BaseClass):
         logger = None,
         n_jobs: int = 10, 
     ):
-        assert not end_date or begin_date <= end_date, ':params:`begin_date` should be'\
-                                                    ' less than or equal to :params:`end_date`.'
+        assert not end_date or begin_date <= end_date, (':params:`begin_date` should be '
+                                                        'less than or equal to :params:`end_date`.')
 
         if logger is None:
             self.logger = logging.getLogger(__name__)
@@ -41,11 +41,11 @@ class AlphaFactor(BaseClass):
         self.trans_time = trans_time
         self.n_jobs = n_jobs
 
-        self.ds = 1 if self.trans_time < '1457' else 0 # day-shifted of daily data
+        self.ds = 1 if self.trans_time < '1457' else 0  # day-shifted of daily data
 
         self.params = self.set_params()
         self.prelength = self.params.get('prelength', 1)
-        self.ilength = self.params.get('ilength', 1) # intra-day length (a.k.a. min_prelen before), default to be 1
+        self.ilength = self.params.get('ilength', 1)  # intra-day length (a.k.a. min_prelen before), default to be 1
         assert self.prelength > 0 and self.ilength > 0, ':params:`self.prelength` and :params:`self.ilength` '
         'should be greater than 0.'
         self.name = Path(self.params.pop('file')).stem
@@ -74,7 +74,7 @@ class AlphaFactor(BaseClass):
 
     @abstractmethod
     def set_params():
-        pass # set [`prelength`, `ilength`, `idaily_data`]
+        pass  # set [`prelength`, `ilength`, `idaily_data`]
 
     def get_params(self) -> Mapping:
         return {
@@ -90,10 +90,10 @@ class AlphaFactor(BaseClass):
                 self.data_loaded.append(field)
 
     def load_trade(self):
-        raise NotImplementedError # to add
+        raise NotImplementedError  # to add
 
     def load_order(self):
-        raise NotImplementedError # to add
+        raise NotImplementedError  # to add
 
     def load_minute(self, date: Union[str, datetime], fields: Iterable[str]) -> Mapping:
         self._add_fields(fields=[f'Minute{field[2:].capitalize()}' for field in fields])
@@ -118,7 +118,11 @@ class AlphaFactor(BaseClass):
         else:
             return {k: v.loc[:date].iloc[-self.ilength:].copy() for k, v in self.idaily_data.items()}
 
-    def _mp_wrapper(self, func, date_list) -> DataFrame:
+    def _mp_wrapper(
+        self, 
+        func: Callable[[Union[str, datetime]], list[Series]], 
+        date_list: Iterable[Union[str, datetime]], 
+    ) -> DataFrame:
         return [func(date).rename(date) for date in date_list]
 
     def ihelper(self, func: Callable[[DataFrame], DataFrame]) -> DataFrame:

@@ -47,11 +47,11 @@ def check_prediction(factor, factor_value, length, d, group_num=20):
             pass
 
         x.loc[:, ~is_buyable.loc[buying_date]] = np.nan
-        x = x.sub(x.mean(axis=1), axis=0) # excess return
+        x = x.sub(x.mean(axis=1), axis=0)  # excess return
 
         # Exponential weights, e.g. np.array([[1], [0.9], [0.81], ...])
         w = np.tile(np.array([d**i for i in range(len(x))])[..., np.newaxis], x.shape[1])
-        excess_return[factor_date] = (x * w).sum() / (x.notna() * w).sum().replace(0, np.nan) # Ignore nans
+        excess_return[factor_date] = (x * w).sum() / (x.notna() * w).sum().replace(0, np.nan)  # Ignore nans
 
     excess_return = pd.DataFrame(excess_return).T.reindex(fval.index) * 100
     return pd.DataFrame({i: excess_return[fval == i].mean(axis=1) for i in range(1, group_num+1)})

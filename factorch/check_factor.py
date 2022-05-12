@@ -98,7 +98,7 @@ def main(args):
         fail_path.unlink(missing_ok=True)
 
 
-def _mp_wrapper(factor, factor_value, begin_date, op_name, op_func, to_path):
+def _mp_wrapper(factor, factor_value, begin_date, op_name, op_func, to_path): 
     fname = f'{factor}_{op_name}'
     fval = eval(op_func.format(factor='factor_value')).loc[begin_date:].replace([-np.inf, np.inf], np.nan)
 

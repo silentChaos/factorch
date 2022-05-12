@@ -20,15 +20,13 @@ class BaseClass(object):
 
     date_blacklist = [pd.Timestamp(d) for d in ['20191023', '20200203']]
 
-    for pname in ['daily_path', 'minute_path', 'trade_path', 'order_path', 'stock_pool_path']:
+    for pname in ['daily_path', 'minute_path', 'trade_path', 'order_path', 'stock_pool_path', 'factor_root_path']:
         vars()[pname] = Path(config.get('Path', pname))
 
-    factor_root_path = Path(config.get('Path', 'factor_root_path'))
-
-    finfo_path = factor_root_path / 'factor_info'
+    finfo_path = factor_root_path / 'factor_info'  # type: ignore
     os.makedirs(finfo_path, exist_ok=True)
 
-    data_path = factor_root_path / 'data'
+    data_path = factor_root_path / 'data'  # type: ignore
 
     for subdir in ['price', 'price_table']:
         p = data_path / subdir
