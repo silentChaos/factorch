@@ -49,5 +49,3 @@ class BaseClass(object):
         elif cls.file_type == 'parquet':
             df = pd.read_parquet(file, columns=cols)
         return df
-
-

@@ -25,5 +25,3 @@ def rolling_ewm(df: DataFrame, d: int) -> DataFrame:
 def ewm(df: DataFrame, span: int) -> DataFrame:
     return pd.concat([df.iloc[idx-span:idx].ewm(span=span).mean().iloc[-1] 
                         for idx in range(span, len(df)+1)], axis=1).T.sort_index(0).sort_index(1)
-
-

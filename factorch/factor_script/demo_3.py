@@ -41,5 +41,3 @@ def ifunc(m_volume, float_a_shares, B_Volume):
     # 所有日内处理
     s_tr = (m_volume.sum() - B_Volume.sum()) / float_a_shares.squeeze()
     return s_tr # 返回为 pd.Series
-
-

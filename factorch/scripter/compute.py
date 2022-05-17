@@ -25,8 +25,9 @@ class AlphaFactor(BaseClass):
         logger = None,
         n_jobs: int = 10, 
     ):
-        assert not end_date or begin_date <= end_date, (':params:`begin_date` should be '
-                                                        'less than or equal to :params:`end_date`.')
+        assert not end_date or begin_date <= end_date, (
+            ':params:`begin_date` should be less than or equal to :params:`end_date`.'
+        )
 
         if logger is None:
             self.logger = logging.getLogger(__name__)
@@ -46,8 +47,9 @@ class AlphaFactor(BaseClass):
         self.params = self.set_params()
         self.prelength = self.params.get('prelength', 1)
         self.ilength = self.params.get('ilength', 1)  # intra-day length (a.k.a. min_prelen before), default to be 1
-        assert self.prelength > 0 and self.ilength > 0, ':params:`self.prelength` and :params:`self.ilength` '
-        'should be greater than 0.'
+        assert self.prelength > 0 and self.ilength > 0, (
+            ':params:`self.prelength` and :params:`self.ilength` should be greater than 0.'
+        )
         self.name = Path(self.params.pop('file')).stem
         
         self.minute_status = (
@@ -143,5 +145,3 @@ class AlphaFactor(BaseClass):
         os.makedirs(to_path, exist_ok=True)
         factor_value.to_pickle(to_path / 'factor_value.pkl')
         return factor_value
-
-

@@ -83,5 +83,3 @@ class DataLoader(BaseClass):
         else:
             idx = self.load_daily(field='vwap', begin_date=begin_date, end_date=end_date).stack(dropna=False).index
             return DataFrame(True, index=idx, columns=['is_valid_all'])
-
-

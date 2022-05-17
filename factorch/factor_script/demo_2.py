@@ -28,5 +28,3 @@ def dfunc(close, adjfactor):
     factor = ret.rolling(5, 3).max()
     factor[np.isinf(factor)] = np.nan
     return factor
-
-

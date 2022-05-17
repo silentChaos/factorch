@@ -22,5 +22,3 @@ def stream_logger_handler(
 
 def get_intersect_idx(left: Union[Series, DataFrame], right: Union[Series, DataFrame]) -> Iterable[str]:
     return left.index.intersection(right.index).sort_values() 
-
-

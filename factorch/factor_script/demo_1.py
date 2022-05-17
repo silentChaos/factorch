@@ -40,5 +40,3 @@ def ifunc(m_volume, float_a_shares):
     # 所有日内处理
     tr = m_volume / float_a_shares.reindex(m_volume.index.date).values
     return tr.mean() # 返回为 pd.Series
-
-

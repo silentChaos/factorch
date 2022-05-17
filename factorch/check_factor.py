@@ -31,8 +31,9 @@ def main(args):
     factor_file = args.factor_file
     op_flag = args.op_flag
 
-    assert (factor or factor_file) and not (factor and factor_file), 'One and only one of :args:`factor` '
-    'and :args:`factor_file` has to be provided.'
+    assert (factor or factor_file) and not (factor and factor_file), (
+        'One and only one of :args:`factor` and :args:`factor_file` has to be provided.'
+    )
     assert op_flag in ['single', 'all']
 
     logger = logging.getLogger(__name__)
@@ -53,7 +54,8 @@ def main(args):
         ok_path = to_path / '_ok'
         fail_path = to_path / '_fail'
         if ok_path.exists():
-            continue # NOTE
+            # continue # NOTE
+            pass
         
         try:
             mod = importlib.import_module(f'factor_script.{factor}')
@@ -105,18 +107,22 @@ def _mp_wrapper(factor, factor_value, begin_date, op_name, op_func, to_path):
     excess_return = check_prediction(
         factor=fname, 
         factor_value=fval, 
-        length=4, 
+        length=3, 
         d=.9, 
         group_num=20, 
     )
 
-    excret_mean = excess_return.mean()
-    top_group = excret_mean.idxmax()
-    top_group_excret_mean = excret_mean[top_group]
-    top_group_sharpe = top_group_excret_mean / excess_return.std()[top_group]
+    # Excess return mean
+    r = excess_return['#r'].rename(factor)
+    top_group = r.groupby(level=1).mean().idxmax()  # 最高组
+    top_group_excret = r.xs(top_group, level=1)
+
+    top_group_excret_mean = top_group_excret.mean()
+    top_group_sharpe = top_group_excret_mean / top_group_excret.std()
 
     color = None
-    if top_group_excret_mean > .05 or top_group_sharpe > .25:
+    
+    if top_group_excret_mean > .035 and top_group_sharpe > .3:
         fval.to_pickle(to_path / f'factor_value_{op_name}.pkl') 
         excess_return.to_pickle(to_path / f'excess_return_{op_name}.pkl') 
         color = 'yellow'
@@ -165,5 +171,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-
-
